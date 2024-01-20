@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import logging
 import logging.config
-from utils.load_resourses import load_image_embedding
+from server.utils.load_resourses import load_image_embedding
 from server.methods.search import Search
 import xmlrpc.client
 from contextlib import asynccontextmanager

@@ -1,5 +1,0 @@
-setup.py
-encoder.egg-info/PKG-INFO
-encoder.egg-info/SOURCES.txt
-encoder.egg-info/dependency_links.txt
-encoder.egg-info/top_level.txt

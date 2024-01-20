@@ -4,8 +4,7 @@ import os
 
 
 def load_image_embedding():
-    current_script_path = os.path.dirname(os.path.abspath(__file__))
-    path = os.path.join(current_script_path, '..', 'dataset', 'feature', 'image_embedding.pkl')
+    path = os.path.join("dataset", "feature", "image_embedding.pkl")
     feature_path = os.path.normpath(path)
     with open(feature_path, 'rb') as fp:
         vector_embedding = pickle.load(fp)

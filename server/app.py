@@ -5,7 +5,7 @@ from pydantic import BaseModel
 import logging
 import logging.config
 from utils.load_resourses import load_image_embedding
-from src.methods.search import Search
+from server.methods.search import Search
 import xmlrpc.client
 from contextlib import asynccontextmanager
 import os
@@ -34,7 +34,6 @@ odoo = OdooConfig()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    
     odoo.uid = odoo.get_common_proxy().authenticate(odoo.db_name, odoo.username, odoo.password, {})
     print("Successfully connected to Odoo!")
     yield 
@@ -45,17 +44,7 @@ async def lifespan(app: FastAPI):
     
 app = FastAPI(lifespan=lifespan)
 
-
-
 app.mount("/dataset", StaticFiles(directory="dataset"), name="dataset")
-
-#CORS
-origin = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://localhost:3000"
-]
 
 app.add_middleware(
     CORSMiddleware,
@@ -75,7 +64,7 @@ index = load_image_embedding()
 
 app_logger = logging.getLogger("app_logger")
 
-@app.get('/search')
+@app.get('/search', tags=["product"])
 async def search(query: Optional[str] = None):
     try:
         model_name = "product.template"
@@ -137,7 +126,7 @@ async def search(query: Optional[str] = None):
         app_logger.error(e)
         return {"message": "Something went wrong!"}
     
-@app.post('/translate')
+@app.post('/translate', tags=["translate"])
 async def translate(query: str):
     try:
         translator = Translator(service_urls=['translate.google.com'])
@@ -148,7 +137,7 @@ async def translate(query: str):
         return {"message": "Something went wrong!"}
     
 
-@app.get('/split-text')
+@app.get('/split-text', tags=["split-text"])
 def split_sentence(input_sentence):
     words = input_sentence.split()
     result = []

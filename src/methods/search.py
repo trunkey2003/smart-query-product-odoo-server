@@ -22,7 +22,7 @@ image_id.sort()
 
 textEncoderHolder = encoder.Encoder()
 #result is number of return result
-def Search(search_text, results, index):
+def Search(search_text, results, index) -> list:
     with torch.no_grad():
         text_search_embedding = textEncoderHolder.encode_text([search_text], batch_size=128)
     text_search_embedding = text_search_embedding/np.linalg.norm(text_search_embedding, ord=2, axis=-1, keepdims=True)
@@ -31,10 +31,13 @@ def Search(search_text, results, index):
     indices = indices[0]
 
     indices_distances = list(zip(indices, distances))
-    indices_distances.sort(key=lambda x: x[1])
+    indices_distances.sort(key=lambda x: x[1], reverse=True)
     fixed_size = (300, 300)
     result_paths = []
     for idx, distance in indices_distances:
-        result_paths.append(image_id[idx])
+        result_paths.append({
+            "id": int(image_id[idx]),
+            "distance": float(distance),
+        })
     return result_paths
     
